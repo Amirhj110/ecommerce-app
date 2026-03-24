@@ -7,7 +7,7 @@ from datetime import datetime
 # -------------------------------
 # Configuration
 # -------------------------------
-API_BASE_URL = "http://localhost:8000/api/"
+API_BASE_URL = st.secrets["API_BASE_URL"]
 TOKEN_URL = f"{API_BASE_URL}token/"
 REFRESH_URL = f"{API_BASE_URL}token/refresh/"
 
