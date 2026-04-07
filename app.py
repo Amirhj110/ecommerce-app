@@ -7,7 +7,7 @@ from datetime import datetime
 # -------------------------------
 # Configuration
 # -------------------------------
-API_BASE_URL = "http://localhost:8000/api/"
+API_BASE_URL = "https://Alexhj114.pythonanywhere.com/api/"
 TOKEN_URL = f"{API_BASE_URL}token/"
 REFRESH_URL = f"{API_BASE_URL}token/refresh/"
 
@@ -18,11 +18,11 @@ def load_css():
     st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
+
         * {
             font-family: 'Inter', sans-serif;
         }
-        
+
         .main-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 1.5rem;
@@ -30,7 +30,7 @@ def load_css():
             margin-bottom: 2rem;
             color: white;
         }
-        
+
         .category-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             padding: 1rem;
@@ -41,11 +41,11 @@ def load_css():
             transition: transform 0.3s ease;
             margin-bottom: 1rem;
         }
-        
+
         .category-card:hover {
             transform: translateY(-5px);
         }
-        
+
         .product-card {
             background: white;
             border-radius: 10px;
@@ -54,36 +54,36 @@ def load_css():
             transition: all 0.3s ease;
             margin-bottom: 1.5rem;
         }
-        
+
         .product-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 5px 20px rgba(0,0,0,0.15);
         }
-        
+
         .product-image {
             width: 100%;
             height: 200px;
             object-fit: cover;
         }
-        
+
         .product-info {
             padding: 1rem;
         }
-        
+
         .product-title {
             font-size: 1rem;
             font-weight: 600;
             margin: 0 0 0.5rem 0;
             color: #333;
         }
-        
+
         .product-price {
             font-size: 1.25rem;
             font-weight: 700;
             color: #667eea;
             margin: 0.5rem 0;
         }
-        
+
         .offer-banner {
             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
             padding: 2rem;
@@ -94,11 +94,11 @@ def load_css():
             cursor: pointer;
             transition: transform 0.3s ease;
         }
-        
+
         .offer-banner:hover {
             transform: translateY(-3px);
         }
-        
+
         .feature-card {
             text-align: center;
             padding: 1.5rem;
@@ -106,11 +106,11 @@ def load_css():
             border-radius: 10px;
             transition: all 0.3s ease;
         }
-        
+
         .feature-card:hover {
             transform: translateY(-3px);
         }
-        
+
         .btn-primary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -121,12 +121,12 @@ def load_css():
             transition: all 0.3s ease;
             width: 100%;
         }
-        
+
         .btn-primary:hover {
             opacity: 0.9;
             transform: translateY(-2px);
         }
-        
+
         .badge {
             background: #ff6b6b;
             color: white;
@@ -135,7 +135,7 @@ def load_css():
             font-size: 0.75rem;
             font-weight: 600;
         }
-        
+
         .success-toast {
             position: fixed;
             top: 20px;
@@ -147,7 +147,7 @@ def load_css():
             z-index: 9999;
             animation: slideIn 0.3s ease;
         }
-        
+
         @keyframes slideIn {
             from {
                 transform: translateX(100%);
@@ -206,10 +206,10 @@ def api_request(method, endpoint, data=None):
             response = requests.delete(url, headers=get_headers())
         else:
             return None
-        
+
         response.raise_for_status()
         data = response.json()
-        
+
         if isinstance(data, dict) and "results" in data:
             return data["results"]
         return data
@@ -244,7 +244,7 @@ def register(username, password, email):
             "password": password,
             "email": email
         })
-        
+
         if response.status_code == 201:
             st.success("✅ Registration successful! Please log in.")
             return True
@@ -290,7 +290,7 @@ def add_to_cart(product_id, quantity=1):
         time.sleep(0.5)
         st.rerun()
         return False
-    
+
     response = api_request("POST", "cart/add_item/", {"product_id": product_id, "quantity": quantity})
     if response is not None:
         fetch_cart()
@@ -362,7 +362,7 @@ def categories_section():
     """Display categories section"""
     st.markdown("### 📂 Shop by Category")
     categories = api_request("GET", "categories/")
-    
+
     if categories and isinstance(categories, list):
         cols = st.columns(4)
         for i, cat in enumerate(categories[:8]):
@@ -376,14 +376,14 @@ def features_section():
     """Display features section"""
     st.markdown("### 🌟 Why Choose E-Commerce?")
     col1, col2, col3, col4 = st.columns(4)
-    
+
     features = [
         ("💰", "Money Back", "30 Days Money Back Guarantee"),
         ("🚚", "Free Shipping", "Shipping on orders over $59"),
         ("🎁", "Special Sale", "Extra $5 off on all items"),
         ("🛡️", "Secure Payment", "100% Secure Payment")
     ]
-    
+
     for i, (icon, title, text) in enumerate(features):
         with [col1, col2, col3, col4][i]:
             st.markdown(f"""
@@ -405,7 +405,7 @@ def special_offer_section():
         </div>
     </div>
     """, unsafe_allow_html=True)
-    
+
     if st.button("🛍️ SHOP NOW", key="shop_now_btn", use_container_width=True):
         st.session_state.page = "products"
         st.rerun()
@@ -416,11 +416,11 @@ def home_page():
     features_section()
     special_offer_section()
     categories_section()
-    
+
     # New Products Section
     st.markdown("### 🆕 New Arrivals")
     products = api_request("GET", "products/?ordering=-created_at")
-    
+
     if products and isinstance(products, list):
         for i in range(0, min(len(products), 8), 4):
             cols = st.columns(4)
@@ -432,7 +432,7 @@ def home_page():
                         img_url = None
                         if prod.get("images") and len(prod["images"]) > 0:
                             img_url = prod["images"][0].get("image_url")
-                        
+
                         st.markdown(f"""
                         <div class="product-card">
                             <img src="{img_url or 'https://via.placeholder.com/300x200?text=No+Image'}" class="product-image">
@@ -442,7 +442,7 @@ def home_page():
                             </div>
                         </div>
                         """, unsafe_allow_html=True)
-                        
+
                         col_btn1, col_btn2 = st.columns(2)
                         with col_btn1:
                             if st.button("👁️ View", key=f"view_{prod['id']}", use_container_width=True):
@@ -458,9 +458,9 @@ def home_page():
 def products_page():
     """Products listing page with filters"""
     header()
-    
+
     st.markdown("### 🛍️ All Products")
-    
+
     # Search and Filter Bar
     col1, col2, col3 = st.columns([2, 1, 1])
     with col1:
@@ -471,7 +471,7 @@ def products_page():
         if st.button("🔄 Clear Filters"):
             st.session_state.selected_category = None
             st.rerun()
-    
+
     # Category filter
     category_id = st.session_state.get("selected_category")
     if category_id:
@@ -485,14 +485,14 @@ def products_page():
             products = api_request("GET", f"products/?search={search_term}")
         else:
             products = api_request("GET", "products/")
-    
+
     # Apply sorting
     if products and isinstance(products, list):
         if sort_by == "Price: Low to High":
             products = sorted(products, key=lambda x: x.get('price', 0))
         elif sort_by == "Price: High to Low":
             products = sorted(products, key=lambda x: x.get('price', 0), reverse=True)
-    
+
     # Display products
     if products and len(products) > 0:
         for prod in products:
@@ -503,19 +503,19 @@ def products_page():
                     if prod.get("images") and len(prod["images"]) > 0:
                         img_url = prod["images"][0].get("image_url")
                     st.image(img_url or "https://via.placeholder.com/200x150?text=No+Image", use_container_width=True)
-                
+
                 with col2:
                     st.markdown(f"### {prod['name']}")
                     st.markdown(f"**Price:** ${prod['price']}")
                     stock_status = "✅ In Stock" if prod['stock'] > 0 else "❌ Out of Stock"
                     stock_color = "green" if prod['stock'] > 0 else "red"
                     st.markdown(f"**Stock:** <span style='color:{stock_color}'>{stock_status}</span> ({prod['stock']} left)", unsafe_allow_html=True)
-                    
+
                     rating = prod.get('average_rating')
                     if rating:
                         stars = "⭐" * int(rating) + "☆" * (5 - int(rating))
                         st.markdown(f"**Rating:** {stars} {rating}/5")
-                    
+
                     col_a, col_b = st.columns(2)
                     with col_a:
                         if st.button("👁️ View Details", key=f"view_{prod['id']}", use_container_width=True):
@@ -535,55 +535,55 @@ def products_page():
 def product_detail_page():
     """Product detail page"""
     header()
-    
+
     product_id = st.session_state.get("selected_product")
     if not product_id:
         st.session_state.page = "home"
         st.rerun()
         return
-    
+
     product = api_request("GET", f"products/{product_id}/")
     if not product:
         st.error("Product not found")
         st.session_state.page = "home"
         st.rerun()
         return
-    
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
         if product.get("images") and len(product["images"]) > 0:
             st.image(product["images"][0].get("image_url") or "https://via.placeholder.com/400x300", use_container_width=True)
         else:
             st.image("https://via.placeholder.com/400x300?text=No+Image", use_container_width=True)
-    
+
     with col2:
         st.markdown(f"# {product['name']}")
         st.markdown(f"### ${product['price']}")
-        
+
         rating = product.get('average_rating')
         if rating:
             stars = "⭐" * int(rating) + "☆" * (5 - int(rating))
             st.markdown(f"**Rating:** {stars} {rating}/5 ({product.get('review_count', 0)} reviews)")
-        
+
         stock_status = "✅ In Stock" if product['stock'] > 0 else "❌ Out of Stock"
         st.markdown(f"**Stock:** {stock_status}")
         st.markdown(f"**Category:** {product.get('category_name', 'Uncategorized')}")
         st.markdown(f"**Seller:** {product.get('seller_name', 'E-Commerce')}")
-        
+
         st.markdown("### Description")
         st.write(product['description'])
-        
+
         if product['stock'] > 0:
             quantity = st.number_input("Quantity", min_value=1, max_value=product['stock'], value=1)
             if st.button("🛒 Add to Cart", use_container_width=True):
                 add_to_cart(product["id"], quantity)
-    
+
     # Reviews Section
     st.markdown("---")
     st.markdown("### 📝 Customer Reviews")
     reviews = product.get("reviews", [])
-    
+
     if reviews and isinstance(reviews, list) and len(reviews) > 0:
         for rev in reviews[:5]:
             stars = "⭐" * rev.get('rating', 0)
@@ -596,7 +596,7 @@ def product_detail_page():
             """, unsafe_allow_html=True)
     else:
         st.info("No reviews yet. Be the first to review this product!")
-    
+
     if st.button("← Back to Products"):
         st.session_state.page = "products"
         st.rerun()
@@ -604,16 +604,16 @@ def product_detail_page():
 def cart_page():
     """Shopping cart page"""
     header()
-    
+
     st.markdown("### 🛒 Your Shopping Cart")
-    
+
     if not st.session_state.user:
         st.warning("Please log in to view your cart.")
         if st.button("🔐 Login", use_container_width=True):
             st.session_state.page = "login"
             st.rerun()
         return
-    
+
     cart = st.session_state.cart
     if not cart or not cart.get("items") or len(cart.get("items", [])) == 0:
         st.info("Your cart is empty. Start shopping!")
@@ -621,7 +621,7 @@ def cart_page():
             st.session_state.page = "products"
             st.rerun()
         return
-    
+
     # Display cart items
     subtotal = 0
     for item in cart["items"]:
@@ -648,14 +648,14 @@ def cart_page():
                     remove_from_cart(item["product"])
                     st.rerun()
             subtotal += item.get("subtotal", 0)
-    
+
     st.markdown("---")
-    
+
     # Calculate totals
     shipping = 5.00
     tax = subtotal * 0.10
     total = subtotal + shipping + tax
-    
+
     col1, col2 = st.columns([2, 1])
     with col1:
         st.markdown(f"**Subtotal:** ${subtotal:.2f}")
@@ -673,21 +673,21 @@ def cart_page():
 def checkout_page():
     """Checkout page"""
     header()
-    
+
     st.markdown("### 📦 Checkout")
-    
+
     if not st.session_state.user:
         st.warning("Please log in to checkout.")
         if st.button("🔐 Login", use_container_width=True):
             st.session_state.page = "login"
             st.rerun()
         return
-    
+
     cart = st.session_state.cart
     if not cart or not cart.get("items") or len(cart.get("items", [])) == 0:
         st.info("Your cart is empty. Cannot checkout.")
         return
-    
+
     with st.form("checkout_form"):
         st.markdown("#### Shipping Information")
         col1, col2 = st.columns(2)
@@ -697,10 +697,10 @@ def checkout_page():
         with col2:
             postal = st.text_input("Postal Code *")
             country = st.selectbox("Country", ["United States", "Canada", "United Kingdom", "Australia", "Other"])
-        
+
         st.markdown("#### Payment Method")
         payment_method = st.selectbox("Select Payment", ["Credit Card", "PayPal", "Debit Card"])
-        
+
         if payment_method in ["Credit Card", "Debit Card"]:
             col1, col2 = st.columns(2)
             with col1:
@@ -708,7 +708,7 @@ def checkout_page():
             with col2:
                 expiry = st.text_input("Expiry (MM/YY)")
             cvv = st.text_input("CVV", type="password", max_chars=3)
-        
+
         submitted = st.form_submit_button("Place Order", use_container_width=True)
         if submitted:
             if not address or not city or not postal:
@@ -724,16 +724,16 @@ def checkout_page():
 def orders_page():
     """Order history page"""
     header()
-    
+
     st.markdown("### 📋 My Orders")
-    
+
     if not st.session_state.user:
         st.warning("Please log in to view orders.")
         if st.button("🔐 Login", use_container_width=True):
             st.session_state.page = "login"
             st.rerun()
         return
-    
+
     orders = api_request("GET", "orders/")
     if orders and isinstance(orders, list) and len(orders) > 0:
         for order in orders:
@@ -745,7 +745,7 @@ def orders_page():
                 'cancelled': ('🔴', '#dc3545')
             }
             icon, color = status_colors.get(order.get('status', ''), ('⚪', '#6c757d'))
-            
+
             with st.expander(f"{icon} Order #{order.get('order_number', 'N/A')} - ${order.get('total', 0)} - {order.get('status', 'Unknown').upper()}"):
                 st.write(f"**Placed on:** {order.get('created_at', 'N/A')[:10]}")
                 st.write(f"**Shipping to:** {order.get('shipping_address', 'N/A')}, {order.get('shipping_city', 'N/A')}")
@@ -754,7 +754,7 @@ def orders_page():
                 if items:
                     for item in items:
                         st.write(f"  • {item.get('product_name', 'Unknown')} x {item.get('quantity', 0)} = ${item.get('subtotal', 0)}")
-                
+
                 if order.get('status') == 'pending':
                     if st.button("Cancel Order", key=f"cancel_{order['id']}"):
                         cancel_response = api_request("POST", f"orders/{order['id']}/cancel/")
@@ -775,7 +775,7 @@ def login_page():
         <p>Login to your E-Commerce account</p>
     </div>
     """, unsafe_allow_html=True)
-    
+
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         with st.form("login_form"):
@@ -784,7 +784,7 @@ def login_page():
             submitted = st.form_submit_button("Login", use_container_width=True)
             if submitted:
                 login(username, password)
-        
+
         st.markdown("---")
         st.markdown("Don't have an account?")
         if st.button("Create New Account", use_container_width=True):
@@ -799,7 +799,7 @@ def register_page():
         <p>Create your account and start shopping</p>
     </div>
     """, unsafe_allow_html=True)
-    
+
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         with st.form("register_form"):
@@ -807,7 +807,7 @@ def register_page():
             email = st.text_input("Email *")
             password = st.text_input("Password *", type="password")
             confirm = st.text_input("Confirm Password *", type="password")
-            
+
             submitted = st.form_submit_button("Register", use_container_width=True)
             if submitted:
                 if password != confirm:
@@ -821,7 +821,7 @@ def register_page():
                     if success:
                         st.session_state.page = "login"
                         st.rerun()
-        
+
         st.markdown("---")
         st.markdown("Already have an account?")
         if st.button("Back to Login", use_container_width=True):
@@ -834,45 +834,45 @@ def register_page():
 def main():
     # Load custom CSS
     load_css()
-    
+
     # Initialize session
     init_session()
-    
+
     # Show toast notification
     show_toast()
-    
+
     # Sidebar navigation
     with st.sidebar:
         st.markdown("## 🛍️ E-commerce")
         st.markdown("---")
-        
+
         if st.session_state.user:
             st.markdown(f"### 👤 {st.session_state.user}")
             st.markdown("---")
-        
+
         # Navigation
         st.markdown("### Navigation")
         if st.button("🏠 Home", use_container_width=True):
             st.session_state.selected_category = None
             st.session_state.page = "home"
             st.rerun()
-        
+
         if st.button("🛍️ All Products", use_container_width=True):
             st.session_state.selected_category = None
             st.session_state.page = "products"
             st.rerun()
-        
+
         if st.button("🛒 Cart", use_container_width=True):
             st.session_state.page = "cart"
             st.rerun()
-        
+
         if st.session_state.user:
             if st.button("📦 My Orders", use_container_width=True):
                 st.session_state.page = "orders"
                 st.rerun()
-        
+
         st.markdown("---")
-        
+
         # Cart Summary
         if st.session_state.cart and st.session_state.cart.get("items"):
             cart = st.session_state.cart
@@ -882,7 +882,7 @@ def main():
             if st.button("View Cart", use_container_width=True):
                 st.session_state.page = "cart"
                 st.rerun()
-        
+
         # User actions
         st.markdown("---")
         if not st.session_state.user:
@@ -895,7 +895,7 @@ def main():
         else:
             if st.button("🚪 Logout", use_container_width=True):
                 logout()
-    
+
     # Page routing
     if st.session_state.page == "home":
         home_page()

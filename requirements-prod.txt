@@ -1,0 +1,5 @@
+# Production requirements — install on Railway/server in addition to requirements.txt
+# pip install -r requirements-prod.txt
+
+# PostgreSQL adapter (Railway provides binary wheels)
+psycopg2-binary==2.9.9
