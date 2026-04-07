@@ -8,9 +8,8 @@ djangorestframework-simplejwt==5.3.1
 # Filtering
 django-filter==24.3
 
-# Database adapter — only needed in production (PostgreSQL on Railway)
-# Install separately on server: pip install psycopg2-binary
-# psycopg2-binary is NOT listed here to avoid build failures on Python 3.14 Windows dev
+# Database adapter for PostgreSQL (Railway production)
+psycopg2-binary==2.9.10
 
 # Database URL parser (works without psycopg2 in SQLite dev mode)
 dj-database-url==2.2.0
