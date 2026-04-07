@@ -69,7 +69,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
-# Database — PostgreSQL via DATABASE_URL env var, SQLite fallback for dev
+# Database — PostgreSQL via DATABASE_URL env var (required for Railway), SQLite fallback for local dev
 import os
 
 DATABASE_URL = os.getenv('DATABASE_URL')
