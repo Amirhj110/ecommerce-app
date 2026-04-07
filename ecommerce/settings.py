@@ -70,7 +70,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 # Database — PostgreSQL via DATABASE_URL env var, SQLite fallback for dev
-DATABASE_URL = config('DATABASE_URL', default=None)
+DATABASE_URL = config(
+    'DATABASE_URL',
+    default='postgresql://postgres:lOLNBBAAUCgfolstFAgRxudfpWQrZDDU@postgres.railway.internal:5432/railway'
+)
+
 if DATABASE_URL:
     DATABASES = {
         'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
