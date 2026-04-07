@@ -147,7 +147,7 @@ SIMPLE_JWT = {
 # ─── CORS ──────────────────────────────────────────────────────────────────────
 CORS_ALLOWED_ORIGINS = config(
     'CORS_ALLOWED_ORIGINS',
-    default='http://localhost:5173,http://127.0.0.1:5173,https://amirhj110.github.io'
+    default='http://localhost:5173,http://127.0.0.1:5173,https://amirhj110.github.io,https://amirhj110.github.io/ecommerce-app'
 ).split(',')
 
 CORS_ALLOW_CREDENTIALS = True
