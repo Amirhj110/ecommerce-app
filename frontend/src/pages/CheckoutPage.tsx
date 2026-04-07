@@ -9,7 +9,7 @@ import {
 } from '@stripe/react-stripe-js';
 import { ArrowLeft, Check, Loader2 } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
-import { ordersApi, paymentsApi, type OrderDetail } from '../lib/api';
+import { ordersApi, paymentsApi, type OrderDetail, type CartItem } from '../lib/api';
 import toast from 'react-hot-toast';
 
 // Initialize Stripe with dynamic key
@@ -321,7 +321,7 @@ export function CheckoutPage() {
             <h3 className="font-serif text-xl text-luxury-charcoal mb-6">Order Summary</h3>
 
             <div className="space-y-4 mb-6">
-              {cartItems.map((item) => (
+              {cartItems.map((item: CartItem) => (
                 <div key={`${item.product}-${item.variant}`} className="flex gap-4">
                   <img
                     src={item.primary_image || '/placeholder-product.jpg'}

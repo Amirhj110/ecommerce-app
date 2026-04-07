@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, Minus, Plus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
 import { useAuthStore } from '../store/authStore';
+import type { CartItem } from '../lib/api';
 
 export function CartPage() {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ export function CartPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
-            {items.map((item) => (
+            {items.map((item: CartItem) => (
               <div
                 key={`${item.product}-${item.variant}`}
                 className="bg-white border border-luxury-charcoal/10 p-4 flex gap-4"

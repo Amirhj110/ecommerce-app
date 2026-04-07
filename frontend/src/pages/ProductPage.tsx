@@ -83,8 +83,8 @@ export function ProductPage() {
   };
 
   // Get unique sizes and colors
-  const sizes = [...new Set(product?.variants.map((v) => v.size).filter(Boolean))];
-  const colors = [...new Set(product?.variants.map((v) => v.color).filter(Boolean))];
+  const sizes: string[] = [...new Set(product?.variants.map((v: ProductVariant) => v.size).filter(Boolean))];
+  const colors: string[] = [...new Set(product?.variants.map((v: ProductVariant) => v.color).filter(Boolean))];
 
   const [selectedSize, setSelectedSize] = useState('');
   const [selectedColor, setSelectedColor] = useState('');
@@ -93,7 +93,7 @@ export function ProductPage() {
   useEffect(() => {
     if (product?.variants.length) {
       const variant = product.variants.find(
-        (v) => v.size === selectedSize && v.color === selectedColor
+        (v: ProductVariant) => v.size === selectedSize && v.color === selectedColor
       );
       setSelectedVariant(variant || null);
     }
@@ -158,7 +158,7 @@ export function ProductPage() {
             </div>
             {product.images.length > 1 && (
               <div className="flex gap-2 overflow-x-auto">
-                {product.images.map((img) => (
+                {product.images.map((img: { id: number; image_url: string }) => (
                   <button
                     key={img.id}
                     onClick={() => setSelectedImage(img.image_url)}
@@ -238,7 +238,7 @@ export function ProductPage() {
                   Size
                 </label>
                 <div className="flex flex-wrap gap-2">
-                  {sizes.map((size) => (
+                  {sizes.map((size: string) => (
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size === selectedSize ? '' : size)}
@@ -261,7 +261,7 @@ export function ProductPage() {
                   Color
                 </label>
                 <div className="flex flex-wrap gap-2">
-                  {colors.map((color) => (
+                  {colors.map((color: string) => (
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color === selectedColor ? '' : color)}

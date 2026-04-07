@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Package, ChevronRight, Calendar } from 'lucide-react';
-import { ordersApi, type Order, type OrderDetail } from '../lib/api';
+import { ordersApi, type Order, type OrderDetail, type OrderItem } from '../lib/api';
 import { useAuthStore } from '../store/authStore';
 import toast from 'react-hot-toast';
 
@@ -166,7 +166,7 @@ export function OrdersPage() {
                   <div className="mb-6">
                     <p className="text-sm text-luxury-gray mb-2">Items</p>
                     <div className="space-y-2">
-                      {selectedOrder.items.map((item) => (
+                      {selectedOrder.items.map((item: OrderItem) => (
                         <div
                           key={item.id}
                           className="flex justify-between text-sm border-b border-luxury-charcoal/5 pb-2"
