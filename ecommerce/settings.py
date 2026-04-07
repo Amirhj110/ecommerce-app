@@ -69,26 +69,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
-# Database — PostgreSQL via explicit config or DATABASE_URL env var
-DATABASE_URL = config(
-    'DATABASE_URL',
-    default='postgresql://postgres:lOLNBBAAUCgfolstFAgRxudfpWQrZDDU@postgres.railway.internal:5432/railway'
-)
+# Database — PostgreSQL via DATABASE_URL env var, SQLite fallback for dev
+import os
 
+DATABASE_URL = os.getenv('DATABASE_URL')
 if DATABASE_URL:
     DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=True
+        )
     }
 else:
-    # Explicit Railway PostgreSQL configuration
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'railway',
-            'USER': 'postgres',
-            'PASSWORD': 'lOLNBBAAUCgfolstFAgRxudfpWQrZDDU',
-            'HOST': 'postgres.railway.internal',
-            'PORT': '5432',
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
