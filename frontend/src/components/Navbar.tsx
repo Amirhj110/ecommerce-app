@@ -39,7 +39,7 @@ export function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex items-center">
             <span className="font-serif text-xl md:text-2xl font-semibold text-luxury-charcoal tracking-tight">
-              LUXE
+              AMIR
             </span>
           </Link>
 

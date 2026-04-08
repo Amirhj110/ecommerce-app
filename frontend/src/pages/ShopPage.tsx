@@ -6,8 +6,8 @@ import { ProductCard } from '../components/ProductCard';
 
 export function ShopPage() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[] | null>(null);
+  const [categories, setCategories] = useState<Category[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -38,8 +38,9 @@ export function ShopPage() {
       if (sortBy) params.ordering = sortBy;
 
       const response = await productsApi.getProducts(params);
-      setProducts(response.data.results);
-      setTotalCount(response.data.count);
+      const results = response.data?.results;
+      setProducts(Array.isArray(results) ? results : []);
+      setTotalCount(response.data?.count || 0);
     } catch (error) {
       console.error('Failed to fetch products:', error);
     } finally {
@@ -50,7 +51,8 @@ export function ShopPage() {
   const fetchCategories = async () => {
     try {
       const response = await productsApi.getCategories();
-      setCategories(response.data);
+      const data = response.data;
+      setCategories(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Failed to fetch categories:', error);
     }
@@ -140,7 +142,7 @@ export function ShopPage() {
                   >
                     All Categories
                   </button>
-                  {categories.map((category) => (
+                  {(categories || []).map((category) => (
                     <button
                       key={category.id}
                       onClick={() => setSelectedCategory(category.id.toString())}
@@ -239,6 +241,10 @@ export function ShopPage() {
                     </div>
                   </div>
                 ))}
+              </div>
+            ) : !Array.isArray(products) ? (
+              <div className="text-center py-20">
+                <p className="text-luxury-gray text-lg">Loading products...</p>
               </div>
             ) : products.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

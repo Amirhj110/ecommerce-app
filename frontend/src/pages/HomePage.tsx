@@ -5,7 +5,7 @@ import { productsApi, type Product } from '../lib/api';
 import { ProductCard } from '../components/ProductCard';
 
 export function HomePage() {
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [featuredProducts, setFeaturedProducts] = useState<Product[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -16,7 +16,8 @@ export function HomePage() {
           ordering: '-created_at',
           page_size: 8,
         });
-        setFeaturedProducts(response.data.results);
+        const results = response.data?.results;
+        setFeaturedProducts(Array.isArray(results) ? results : []);
       } catch (error) {
         console.error('Failed to fetch products:', error);
       } finally {
@@ -94,10 +95,14 @@ export function HomePage() {
               </div>
             ))}
           </div>
+        ) : !Array.isArray(featuredProducts) ? (
+          <div className="text-center py-12">
+            <p className="text-luxury-gray">Loading products...</p>
+          </div>
         ) : featuredProducts.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredProducts.map((product) => (
+              {(featuredProducts || []).map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
